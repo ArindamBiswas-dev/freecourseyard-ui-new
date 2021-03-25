@@ -86,24 +86,21 @@ function HomePage() {
         <CatagorieCard
           name="Web Development"
           url="https://i.ibb.co/Hh2g5Mm/4884785.jpg"
-          catagoriName="webdevelopment"
+          catagoriName="Web Development"
+          siteId="WebDevelopment"
         />
         <CatagorieCard
           name="Fundametal Computer science"
           url="https://i.ibb.co/4gS4hT2/Laptop-with-program-code-isometric-icon-software-development-and-programming-applications-dark-neon.jpg"
-          catagoriName="fundamentalcomputerscience"
-        />
-
-        <CatagorieCard
-          name="Mathametics"
-          url="https://i.ibb.co/Fs6QP7P/2339356.jpg"
-          catagoriName="mathametics"
+          catagoriName="ComputerScience Fundamental"
+          siteId="ComputerScienceFundamental"
         />
 
         <CatagorieCard
           name="App Development"
           url="https://i.ibb.co/Mh0DjSz/4428861.jpg"
-          catagoriName="appdevelopment"
+          catagoriName="App Development"
+          siteId="AppDevelopment"
         />
       </Flex>
       <Footer />
@@ -113,12 +110,12 @@ function HomePage() {
 
 // https://i.ibb.co/Hh2g5Mm/4884785.jpg || Web Development
 
-function CatagorieCard({ name, url, catagoriName }) {
+function CatagorieCard({ name, url, catagoriName, siteId }) {
   const { colorMode } = useColorMode();
   const bgDark = colorMode === 'light' ? 'gray.200' : 'gray.600';
   return (
     <Box m="3" _hover={{ boxShadow: '2xl' }} textAlign="center">
-      <Link to={`/catagories/${catagoriName}/`}>
+      <Link to={`/catagories/${siteId}/`}>
         <Box w="250px" h="350px" bg={bgDark} rounded="xl">
           <Image
             src={url}

@@ -14,6 +14,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import LogOut from './components/LogOut';
 import SingleSearchCoursePage from './pages/SingleSearchCoursePage';
 import MultipleSearchPage from './pages/MultipleSearchPage';
+import CatagoriePage from './pages/CatagoriePage';
 
 export const userContext = React.createContext();
 export const setUserContext = React.createContext();
@@ -72,6 +73,11 @@ function App() {
                   exact
                   path="/search/:id"
                   render={() => <MultipleSearchPage />}
+                />
+                <Route
+                  exact
+                  path="/catagories/:catagoriName"
+                  render={() => <CatagoriePage />}
                 />
                 <Route path="/" component={Error404Page} />
               </Switch>

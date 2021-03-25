@@ -26,6 +26,19 @@ const fetchSearchCourse = async (page = 0, id) => {
   return [res.data.data, res.data.count];
 };
 
-export { fetchAllCourse, fetchFavCourse, fetchSearchCourse };
+const fetchAllCourseCatagoriwise = async (page = 0, catagoriName) => {
+  const res = await axios.get(
+    `https://freecourseyard-backend.glitch.me/catagory/:${catagoriName}?page=${page}`
+  );
+  // console.log(res.data.data);
+  return [res.data.data, res.data.count];
+};
+
+export {
+  fetchAllCourse,
+  fetchFavCourse,
+  fetchSearchCourse,
+  fetchAllCourseCatagoriwise,
+};
 
 // https://freecourseyard-backend.glitch.me/?page

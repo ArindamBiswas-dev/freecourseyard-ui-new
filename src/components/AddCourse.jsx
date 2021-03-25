@@ -183,11 +183,10 @@ function AddCourse({ cardTitle, isSuggestCourse }) {
   const bgColor = colorMode === 'light' ? 'gray.300' : 'gray.900';
 
   const catagorieItems = [
-    'Web Development',
-    'App Development',
-    'ComputerScience Fundamental',
-    'Mathamatics',
-    'Programming Languages',
+    'WebDevelopment',
+    'AppDevelopment',
+    'ComputerScienceFundamental',
+    'ProgrammingLanguages',
   ];
   return (
     <>
