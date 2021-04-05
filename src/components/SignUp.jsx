@@ -69,14 +69,14 @@ function SignUp({ isLogin }) {
   const [errPassword, setErrPassword] = useState(false);
 
   const mutation = useMutation(async (formData) => {
-    console.log(formData);
+    // console.log(formData);
     try {
       const res = await axios.post(
         `https://freecourseyard-backend.glitch.me/${urlPoint}`,
         formData
       );
-      console.log(res.data.token);
-      if (isLogin) {
+      // console.log(res.data);
+      if (isLogin && res.data.token) {
         localStorage.setItem('token', res.data.token);
         setUser({ token: res.data.token });
         // console.log(userContext.token);
@@ -86,7 +86,16 @@ function SignUp({ isLogin }) {
       setPassword('');
       if (!isLogin)
         toast({ ...toastTypeSuccessOnSignUP, description: res.data.status });
-      else toast({ ...toastTypeSuccessOnLogIn, description: res.data.status });
+      else {
+        res.data.code && res.data.code === '404'
+          ? toast({
+              ...toastTypeSuccessOnLogIn,
+              description: res.data.status,
+              status: 'error',
+              title: 'Verify Email',
+            })
+          : toast({ ...toastTypeSuccessOnLogIn, description: res.data.status });
+      }
       return;
     } catch (error) {
       console.log('error');
@@ -126,7 +135,7 @@ function SignUp({ isLogin }) {
     // send form data to server
     if (!isLogin) mutation.mutate({ name, email, password });
     else mutation.mutate({ email, password });
-    console.log(mutation);
+    // console.log(mutation);
   };
 
   const onHandelChange = (name, e) => {
