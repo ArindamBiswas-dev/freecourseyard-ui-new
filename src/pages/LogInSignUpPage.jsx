@@ -23,7 +23,7 @@ function LogInSignUpPage({ defaultIndex }) {
         <Box
           w="30vw"
           minW="300px"
-          h="450px"
+          minH="450px"
           p="4"
           bg={colorMode === 'light' ? 'gray.300' : 'gray.900'}
           boxShadow="lg"
