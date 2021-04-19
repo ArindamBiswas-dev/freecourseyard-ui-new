@@ -3,16 +3,12 @@ import {
   Button,
   Checkbox,
   Flex,
-  Input,
-  InputGroup,
-  InputLeftElement,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
   Stack,
   Text,
-  Textarea,
   useColorMode,
   useToast,
 } from '@chakra-ui/react';
@@ -21,21 +17,14 @@ import { useState } from 'react';
 import { MdNewReleases, MdLink, MdAddCircle } from 'react-icons/md';
 import { RiArrowDownSFill } from 'react-icons/ri';
 import { useMutation } from 'react-query';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { addCourseSchema } from '../util/YupSchema';
+import CustomInput from './CustomInput';
+import CustomTextArea from './CustomTextArea';
+
 function AddCourse({ cardTitle, isSuggestCourse }) {
   const toast = useToast();
-  // form state
-  const [title, setTitle] = useState('');
-  const [instructor, setInstructor] = useState('');
-  const [courseUrl, setCourseUrl] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
-  const [description, setDescription] = useState('');
-
-  // form error state
-  const [errTitle, setErrTitle] = useState(false);
-  const [errInstructor, setErrInstructor] = useState(false);
-  const [errCourseUrl, setErrCourseUrl] = useState(false);
-  const [errImageUrl, setErrImageUrl] = useState(false);
-  const [errDescription, setErrDescription] = useState(false);
 
   const [checkedArray, setCheckedArray] = useState([]);
 
@@ -66,18 +55,7 @@ function AddCourse({ cardTitle, isSuggestCourse }) {
         formData
       );
       console.log(res.data);
-      setTitle('');
-      setInstructor('');
-      setCourseUrl('');
-      setImageUrl('');
-      setDescription('');
-      setCheckedArray([]);
 
-      setErrTitle('');
-      setErrInstructor('');
-      setErrCourseUrl('');
-      setErrImageUrl('');
-      setErrDescription('');
       toast(toastTypeSuccess);
       setTimeout(function () {
         window.location.reload(false);
@@ -90,36 +68,6 @@ function AddCourse({ cardTitle, isSuggestCourse }) {
     }
   });
 
-  const onInputChangeHandeler = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    switch (name) {
-      case 'title': {
-        setTitle(value);
-        break;
-      }
-      case 'instructor': {
-        setInstructor(value);
-        break;
-      }
-      case 'courseUrl': {
-        setCourseUrl(value);
-        break;
-      }
-      case 'imageUrl': {
-        setImageUrl(value);
-        break;
-      }
-      case 'description': {
-        setDescription(value);
-        break;
-      }
-      default: {
-        console.log('default case');
-      }
-    }
-  };
-
   const onCheckHandeler = (e) => {
     console.log(e.target.name);
     if (checkedArray.includes(e.target.name)) {
@@ -130,53 +78,22 @@ function AddCourse({ cardTitle, isSuggestCourse }) {
     checkedArray.push(e.target.name);
   };
 
-  const onSubmitHandeler = (e) => {
-    e.preventDefault();
+  //* react-hook-form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(addCourseSchema),
+  });
 
-    const value = {
-      title,
-      instructor,
-      courseUrl,
-      imageUrl,
-      description,
-      catagories: checkedArray,
-    };
-    console.log(value);
-    if (!validate(value)) return;
-    console.log(value);
-    // send form data to server
-    mutation.mutate(value);
-  };
-
-  const validate = (value) => {
-    for (let [key, val] of Object.entries(value)) {
-      if ((key === 'catagories' || key === 'imageUrl') && isSuggestCourse)
-        continue;
-
-      if (!isSuggestCourse && key === 'catagories') {
-        if (val.length < 1) {
-          alert('Please select catagorie');
-          return false;
-        }
-        continue;
-      }
-
-      if (val.trim() === '') {
-        if (key === 'title') setErrTitle(true);
-        else if (key === 'instructor') setErrInstructor(true);
-        else if (key === 'courseUrl') setErrCourseUrl(true);
-        else if (key === 'imageUrl') setErrImageUrl(true);
-        else if (key === 'description') setErrDescription(true);
-        return false;
-      } else {
-        if (key === 'title') setErrTitle(false);
-        else if (key === 'instructor') setErrInstructor(false);
-        else if (key === 'courseUrl') setErrCourseUrl(false);
-        else if (key === 'imageUrl' && !isSuggestCourse) setErrImageUrl(false);
-        else if (key === 'description') setErrDescription(false);
-      }
+  const submitHandeler = (data) => {
+    if (checkedArray.length <= 0) {
+      alert('Choose a catagory');
+      return;
     }
-    return true;
+    //  console.log({ ...data, catagories: checkedArray });
+    mutation.mutate({ ...data, catagories: checkedArray });
   };
 
   const { colorMode } = useColorMode();
@@ -195,51 +112,43 @@ function AddCourse({ cardTitle, isSuggestCourse }) {
           <Text fontSize="3xl" fontWeight="semibold" mb="4" textAlign="center">
             {cardTitle}
           </Text>
-          <form onSubmit={onSubmitHandeler}>
+          <form onSubmit={handleSubmit(submitHandeler)}>
             <Stack spacing="5">
-              <CustomeInput
-                placeHolder="Course Title"
-                icon={<MdNewReleases />}
+              <CustomInput
+                placeholder="Course Title"
+                leftElement={<MdNewReleases />}
                 name="title"
-                onChange={onInputChangeHandeler}
-                value={title}
-                invalid={errTitle}
+                errors={errors}
+                register={register}
               />
-              <CustomeInput
-                placeHolder="Instructor Name"
-                icon={<MdNewReleases />}
+              <CustomInput
+                placeholder="Instructor Name"
+                leftElement={<MdNewReleases />}
                 name="instructor"
-                onChange={onInputChangeHandeler}
-                value={instructor}
-                invalid={errInstructor}
+                errors={errors}
+                register={register}
               />
-              <CustomeInput
-                placeHolder="Course Url"
-                icon={<MdLink />}
+              <CustomInput
+                placeholder="Course Url"
+                leftElement={<MdLink />}
                 name="courseUrl"
-                onChange={onInputChangeHandeler}
-                value={courseUrl}
-                invalid={errCourseUrl}
+                errors={errors}
+                register={register}
               />
               {!isSuggestCourse && (
-                <CustomeInput
-                  placeHolder="Image Url"
-                  icon={<MdLink />}
+                <CustomInput
+                  placeholder="Image Url"
+                  leftElement={<MdLink />}
                   name="imageUrl"
-                  onChange={onInputChangeHandeler}
-                  value={imageUrl}
-                  invalid={errImageUrl}
+                  errors={errors}
+                  register={register}
                 />
               )}
-              <Textarea
+              <CustomTextArea
                 placeholder="Description (within 30 words)"
-                bg="white"
-                color="black"
-                _placeholder={{ color: 'gray.500' }}
                 name="description"
-                onChange={onInputChangeHandeler}
-                value={description}
-                isRequired={errDescription}
+                errors={errors}
+                register={register}
               />
               {!isSuggestCourse && (
                 <Menu placement="top-end" closeOnSelect={false} closeOnBlur>
@@ -281,29 +190,6 @@ function AddCourse({ cardTitle, isSuggestCourse }) {
         </Box>
       </Flex>
     </>
-  );
-}
-
-function CustomeInput({ name, placeHolder, onChange, invalid, icon, value }) {
-  return (
-    <InputGroup>
-      <InputLeftElement children={icon} color="black" />
-      <Input
-        size="md"
-        variant="outline"
-        placeholder={placeHolder}
-        type="text"
-        bg="white"
-        errorBorderColor="red.400"
-        color="black"
-        name={name}
-        value={value}
-        onChange={onChange}
-        isInvalid={invalid}
-        _placeholder={{ color: 'gray.500' }}
-        isRequired
-      />
-    </InputGroup>
   );
 }
 
