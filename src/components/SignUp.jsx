@@ -68,7 +68,7 @@ function SignUp({ isLogin }) {
   });
 
   const submitHandeler = (data) => {
-    console.log(data);
+    // console.log(data);
     // send data to server
     if (!isLogin) mutation.mutate(data);
     else mutation.mutate(data);
