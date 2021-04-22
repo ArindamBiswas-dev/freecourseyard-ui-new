@@ -13,7 +13,7 @@ import { IconButton } from '@chakra-ui/button';
 function CustomPasswordInput({ name, placeholder, errors, register }) {
   const [showPassword, setShowPassword] = useState(false);
   return (
-    <div>
+    <div style={{ width: '100%' }}>
       <InputGroup>
         <InputLeftElement children={<MdLock />} color="black" />
         <Input

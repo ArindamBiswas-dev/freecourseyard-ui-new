@@ -47,4 +47,11 @@ const addCourseSchema = yup.object().shape({
   description: yup.string().trim().required(fieldRequired),
 });
 
-export { signUpSchema, logInSchema, addCourseSchema };
+const suggestCourseSchema = yup.object().shape({
+  title: yup.string().trim().required(fieldRequired),
+  instructor: yup.string().trim().required(fieldRequired),
+  courseUrl: yup.string().trim().required(fieldRequired),
+  description: yup.string().trim().required(fieldRequired),
+});
+
+export { signUpSchema, logInSchema, addCourseSchema, suggestCourseSchema };

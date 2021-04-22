@@ -4,7 +4,7 @@ import React from 'react';
 
 function CustomInput({ name, placeholder, errors, register, leftElement }) {
   return (
-    <div>
+    <div style={{ width: '100%' }}>
       <InputGroup>
         <InputLeftElement children={leftElement} color="black" />
         <Input

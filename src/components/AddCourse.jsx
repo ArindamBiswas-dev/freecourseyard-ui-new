@@ -113,7 +113,7 @@ function AddCourse({ cardTitle, isSuggestCourse }) {
             {cardTitle}
           </Text>
           <form onSubmit={handleSubmit(submitHandeler)}>
-            <Stack spacing="5">
+            <Stack spacing="5" w="100%">
               <CustomInput
                 placeholder="Course Title"
                 leftElement={<MdNewReleases />}
