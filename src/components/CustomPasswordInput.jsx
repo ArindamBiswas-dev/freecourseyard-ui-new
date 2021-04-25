@@ -15,18 +15,23 @@ function CustomPasswordInput({ name, placeholder, errors, register }) {
   return (
     <div style={{ width: '100%' }}>
       <InputGroup>
-        <InputLeftElement children={<MdLock />} color="black" />
+        <InputLeftElement
+          children={<MdLock />}
+          color="black"
+          fontSize="1.2em"
+        />
         <Input
           size="md"
           variant="outline"
           bg="white"
           color="black"
           type={showPassword ? 'text' : 'password'}
+          fontSize="lg"
           _placeholder={{ color: 'gray.500' }}
           {...register(name)}
           placeholder={placeholder}
         />
-        <InputRightElement width="4.5rem">
+        <InputRightElement width="4.5rem" fontSize="1.2em">
           <IconButton
             aria-label="Search database"
             variant="unstyled"

@@ -6,13 +6,18 @@ function CustomInput({ name, placeholder, errors, register, leftElement }) {
   return (
     <div style={{ width: '100%' }}>
       <InputGroup>
-        <InputLeftElement children={leftElement} color="black" />
+        <InputLeftElement
+          children={leftElement}
+          color="black"
+          fontSize="1.2em"
+        />
         <Input
           size="md"
           variant="outline"
           type="text"
           bg="white"
           color="black"
+          fontSize="lg"
           _placeholder={{ color: 'gray.500' }}
           {...register(name)}
           placeholder={placeholder}
