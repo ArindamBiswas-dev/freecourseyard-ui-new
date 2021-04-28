@@ -14,7 +14,7 @@ function AllCoursesPage() {
 
   window.scrollTo(0, 0);
 
-  useEffect(() => {}, [data]);
+  useEffect(() => {}, []);
 
   return (
     <>

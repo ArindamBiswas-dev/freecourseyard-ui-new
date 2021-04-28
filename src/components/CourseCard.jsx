@@ -20,7 +20,7 @@ import axios from 'axios';
 import React, { useContext, useState } from 'react';
 import { MdFavorite } from 'react-icons/md';
 import { TiLocationArrow } from 'react-icons/ti';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { Link } from 'react-router-dom';
 import { userContext } from '../App';
 
@@ -39,13 +39,33 @@ function CourseCard({
   const { colorMode } = useColorMode();
 
   const user = useContext(userContext);
+  const queryClient = useQueryClient();
 
   const onClickHandeler = async () => {
     if (!user.token) {
-      console.log('login');
+      // user is not logged in
       setAlert(true);
       return;
     }
+
+    // for the favorite page -- remove from fav. page (optimistic UI update)
+    if (isFav) {
+      try {
+        await queryClient.cancelQueries('FavCourses');
+
+        // Snapshot the previous value
+        const previousFavCourses = queryClient.getQueryData('FavCourses');
+
+        // Optimistically update to the new value
+        queryClient.setQueryData(
+          'FavCourses',
+          previousFavCourses.filter((course) => course._id !== id)
+        );
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
     setFav(!isFav);
     await axios.post(`https://freecourseyard-backend.glitch.me/setfavorite`, {
       token: user.token,
@@ -125,6 +145,7 @@ function CourseCard({
                 icon={<MdFavorite />}
                 size="md"
                 onClick={onClickHandeler}
+                // disabled={!user.token}
               />
               <a href={courseUrl} target="_blank" rel="noreferrer">
                 <Button
